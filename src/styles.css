@@ -32,12 +32,19 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
+  overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 button {
@@ -90,7 +97,7 @@ button {
   padding: 0 10px;
   background: var(--panel-2);
   color: var(--muted);
-  font: 600 13px var(--sans);
+  font: 600 16px var(--sans);
   outline: 0;
 }
 
@@ -198,6 +205,11 @@ textarea {
   line-height: 1.72;
   white-space: pre-wrap;
   overflow: auto;
+}
+
+textarea:focus,
+#notePicker:focus {
+  font-size: max(16px, 1rem);
 }
 
 textarea::selection {
