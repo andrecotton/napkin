@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Napkin icon">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="28" stdDeviation="40" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <linearGradient id="paper" x1="190" y1="116" x2="812" y2="902" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#eceff3"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="700" y1="685" x2="910" y2="910" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#d8dde6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="#2c2d30"/>
+  <g filter="url(#shadow)">
+    <path d="M184 142h656c54 0 98 44 98 98v544c0 54-44 98-98 98H184c-54 0-98-44-98-98V240c0-54 44-98 98-98z" fill="url(#paper)"/>
+    <path d="M744 882c34-12 63-33 88-62l106-122v86c0 54-44 98-98 98h-96z" fill="#c9ced8"/>
+    <path d="M638 882c28-126 98-196 300-184L744 882H638z" fill="url(#fold)"/>
+  </g>
+  <g fill="none" stroke="#155cff" stroke-linecap="round" stroke-linejoin="round" stroke-width="34">
+    <path d="M288 276c64-32 126-24 137 18 13 50-91 103-139 156h154"/>
+    <path d="M528 262l-58 196"/>
+    <path d="M470 372h128"/>
+    <path d="M655 276h150l-116 190"/>
+    <path d="M315 556h386"/>
+    <path d="M366 642h292"/>
+    <path d="M512 716h176"/>
+    <path d="M602 626v176"/>
+  </g>
+</svg>
