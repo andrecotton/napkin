@@ -1,0 +1,17 @@
+{
+  "name": "Napkin",
+  "short_name": "Napkin",
+  "description": "A minimalist computational notepad that calculates as you type.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111316",
+  "theme_color": "#111316",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
