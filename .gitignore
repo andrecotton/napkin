@@ -1,0 +1,9 @@
+dist/
+.vercel/
+.DS_Store
+node_modules/
+Minimalist Computational Notepad Prd.pdf
+example 1.png
+example 2.png
+examples 3.png
+icon.png
