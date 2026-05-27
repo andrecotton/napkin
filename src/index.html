@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111316" />
+    <meta name="description" content="A minimalist computational notepad that calculates as you type." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <title>Napkin</title>
+    <script type="module" src="/app.js"></script>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <button class="icon-button" id="newDoc" title="New note" aria-label="New note">
+          <span>+</span>
+        </button>
+        <div class="brand">
+          <img src="/icon.png" alt="" />
+          <span>Napkin</span>
+        </div>
+        <button class="icon-button" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <span>◐</span>
+        </button>
+      </header>
+
+      <section class="notepad" aria-label="Computational notepad">
+        <div class="editor-grid" id="rows"></div>
+        <textarea id="editor" spellcheck="false" aria-label="Notebook"></textarea>
+      </section>
+
+      <footer class="statusbar">
+        <span id="status">Saved locally</span>
+        <button id="exportText">Export</button>
+      </footer>
+    </main>
+  </body>
+</html>
