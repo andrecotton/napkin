@@ -8,9 +8,13 @@ A minimalist computational notepad PWA. Write naturally and Napkin calculates as
 - Variables and live recalculation
 - Natural percentage semantics
 - Unit, currency, and date conversions
-- Local autosave
+- Multiple local notes with autosave, note switching, deletion, and text export
 - Offline service worker and installable PWA manifest
 - No backend or account required
+
+## Storage
+
+Napkin is local-first. Notes are stored in the browser under `localStorage["napkin:notes"]`, and the active note is tracked with `localStorage["napkin:currentNoteId"]`. The previous single-note key, `napkin:text`, is migrated automatically the first time the updated app opens.
 
 ## Local Preview
 
