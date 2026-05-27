@@ -69,16 +69,58 @@ const UNITS = {
   },
 };
 
+const STORAGE_KEY = "napkin:notes";
+const CURRENT_KEY = "napkin:currentNoteId";
+
+function newNote(text = "", title = "Untitled") {
+  const now = new Date().toISOString();
+  return {
+    id: `note-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    title,
+    text,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+function titleFromText(text) {
+  const firstLine = text.split("\n").map((line) => line.trim()).find(Boolean);
+  if (!firstLine) return "Untitled";
+  return firstLine.replace(/^#+\s*/, "").slice(0, 42);
+}
+
+function loadNotes() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(parsed) && parsed.length) return parsed;
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  const migratedText = localStorage.getItem("napkin:text");
+  return [newNote(migratedText || SAMPLE, migratedText ? titleFromText(migratedText) : "Q4 estimate")];
+}
+
 const state = {
-  text: localStorage.getItem("napkin:text") || SAMPLE,
+  notes: loadNotes(),
+  currentNoteId: localStorage.getItem(CURRENT_KEY),
   theme: localStorage.getItem("napkin:theme") || "dark",
 };
+
+if (!state.notes.some((note) => note.id === state.currentNoteId)) {
+  state.currentNoteId = state.notes[0].id;
+}
 
 const editor = document.querySelector("#editor");
 const rows = document.querySelector("#rows");
 const status = document.querySelector("#status");
+const notePicker = document.querySelector("#notePicker");
 
-editor.value = state.text;
+function currentNote() {
+  return state.notes.find((note) => note.id === state.currentNoteId) || state.notes[0];
+}
+
+editor.value = currentNote().text;
 document.documentElement.classList.toggle("light", state.theme === "light");
 
 function escapeHtml(value) {
@@ -308,8 +350,27 @@ function render() {
   }).join("");
 }
 
+function persistNotes() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.notes));
+  localStorage.setItem(CURRENT_KEY, state.currentNoteId);
+}
+
+function renderNotePicker() {
+  notePicker.innerHTML = state.notes
+    .slice()
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    .map((note) => `<option value="${escapeHtml(note.id)}">${escapeHtml(note.title || "Untitled")}</option>`)
+    .join("");
+  notePicker.value = state.currentNoteId;
+}
+
 function save() {
-  localStorage.setItem("napkin:text", editor.value);
+  const note = currentNote();
+  note.text = editor.value;
+  note.title = titleFromText(editor.value);
+  note.updatedAt = new Date().toISOString();
+  persistNotes();
+  renderNotePicker();
   status.textContent = "Saved locally";
 }
 
@@ -333,18 +394,55 @@ document.querySelector("#themeToggle").addEventListener("click", () => {
 });
 
 document.querySelector("#newDoc").addEventListener("click", () => {
+  save();
+  const note = newNote("", "Untitled");
+  state.notes.unshift(note);
+  state.currentNoteId = note.id;
   editor.value = "";
   editor.focus();
   render();
+  persistNotes();
+  renderNotePicker();
+  status.textContent = "New note";
+});
+
+notePicker.addEventListener("change", () => {
+  const targetNoteId = notePicker.value;
   save();
+  state.currentNoteId = targetNoteId;
+  editor.value = currentNote().text;
+  persistNotes();
+  render();
+  editor.focus();
+  status.textContent = "Opened note";
+});
+
+document.querySelector("#deleteDoc").addEventListener("click", () => {
+  const note = currentNote();
+  if (state.notes.length > 1 && !window.confirm(`Delete "${note.title || "Untitled"}"?`)) return;
+  state.notes = state.notes.filter((item) => item.id !== note.id);
+  if (!state.notes.length) state.notes = [newNote("", "Untitled")];
+  state.currentNoteId = state.notes[0].id;
+  editor.value = currentNote().text;
+  persistNotes();
+  renderNotePicker();
+  render();
+  editor.focus();
+  status.textContent = "Deleted note";
 });
 
 document.querySelector("#exportText").addEventListener("click", () => {
-  const blob = new Blob([editor.value], { type: "text/plain" });
+  save();
+  const note = currentNote();
+  const blob = new Blob([note.text], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
-  const link = Object.assign(document.createElement("a"), { href: url, download: "napkin.txt" });
+  const safeTitle = (note.title || "napkin").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "napkin";
+  const link = Object.assign(document.createElement("a"), { href: url, download: `${safeTitle}.txt` });
+  document.body.append(link);
   link.click();
+  link.remove();
   URL.revokeObjectURL(url);
+  status.textContent = "Exported text";
 });
 
 window.addEventListener("keydown", (event) => {
@@ -363,4 +461,6 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
 }
 
+renderNotePicker();
+persistNotes();
 render();
