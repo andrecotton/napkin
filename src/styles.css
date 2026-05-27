@@ -71,10 +71,27 @@ button {
   letter-spacing: 0;
 }
 
+.topbar {
+  gap: 14px;
+}
+
 .brand img {
   width: 28px;
   height: 28px;
   border-radius: 8px;
+}
+
+#notePicker {
+  min-width: 160px;
+  max-width: min(34vw, 260px);
+  height: 36px;
+  border: 0;
+  border-radius: 7px;
+  padding: 0 10px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font: 600 13px var(--sans);
+  outline: 0;
 }
 
 .icon-button,
@@ -92,6 +109,10 @@ button {
   border-radius: 8px;
   color: var(--muted);
   font-size: 26px;
+}
+
+.subtle-button {
+  font-size: 22px;
 }
 
 .icon-button:hover,
@@ -204,6 +225,11 @@ textarea::selection {
   .topbar,
   .statusbar {
     padding-inline: 12px;
+  }
+
+  #notePicker {
+    min-width: 118px;
+    max-width: 36vw;
   }
 
   .notepad {
